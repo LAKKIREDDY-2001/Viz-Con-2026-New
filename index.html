@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>24 Hours at Amazon — How 1.576M Employees Keep the World Moving</title>
+  <meta name="description" content="Viz Con 2026 — A cinematic 3D visualization of Amazon's 2024-2025 global workforce across 26 countries, major sites/cities, and how they power the world around the clock." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- ===== BACKGROUND CANVAS ===== -->
+  <canvas id="globe-canvas"></canvas>
+
+  <!-- ===== AMBIENT GLOW ===== -->
+  <div id="ambient-glow"></div>
+
+  <!-- ===== STARS LAYER ===== -->
+  <div id="stars"></div>
+
+  <!-- ===== CINEMATIC LOADER ===== -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-ring"></div>
+      <h1 class="loader-title">24 HOURS AT AMAZON</h1>
+      <p class="loader-sub">Initializing global workforce data stream…</p>
+      <div class="loader-bar"><span id="loader-fill"></span></div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 1: OPENING ===== -->
+  <section id="opening" class="screen active">
+    <div class="opening-bg">
+      <div class="planet-glow"></div>
+    </div>
+    <div class="opening-content">
+<p class="opening-kicker">VIZ CON 2026 · GLOBAL WORKFORCE VISUALIZATION</p>
+      <h1 class="opening-title">
+        <span class="line">24 HOURS</span>
+        <span class="line accent">AT AMAZON</span>
+      </h1>
+      <p class="opening-sub">How <em>~1.576 million employees</em> across 26 countries keep the world's store, cloud, and delivery network running — right now, every second, around the clock.</p>
+      <div class="opening-metrics" aria-label="Amazon workforce dataset highlights">
+        <div><strong>2024</strong><span>1.556M employees</span></div>
+        <div><strong>2025</strong><span>1.576M employees</span></div>
+        <div><strong>76</strong><span>site-city markers</span></div>
+      </div>
+<div class="opening-actions">
+        <button id="begin-btn" class="btn btn-glow">Begin Journey <span>➜</span></button>
+        <button id="story-btn" class="btn btn-outline">▶ Story Mode</button>
+        <button class="btn btn-outline btn-global global-story-btn">🌍 Global Story</button>
+      </div>
+      <p class="opening-hint">🖱️ Drag the globe to rotate it · Click any Amazon site marker to explore its workforce, sites &amp; story</p>
+    </div>
+  </section>
+
+  <!-- ===== SCREEN 2: GLOBE EXPLORER ===== -->
+  <section id="globe-screen" class="screen">
+    <!-- Top bar -->
+    <header class="topbar">
+<div class="logo">24<span>H</span> AMAZON</div>
+      <div class="search-box">
+        <input type="text" id="country-search" placeholder="Search country…" autocomplete="off" />
+        <div id="search-results" class="search-results"></div>
+      </div>
+<div class="topbar-actions">
+        <button class="btn btn-ghost btn-global global-story-btn" title="Watch the global 24-hour story">🌍 Global</button>
+        <button id="offices-btn" class="btn btn-ghost">Sites</button>
+        <button id="insights-btn" class="btn btn-ghost">Insights</button>
+        <button id="compare-btn" class="btn btn-ghost">Compare</button>
+      </div>
+    </header>
+
+    <!-- Live Stats Dashboard -->
+<div class="live-dash">
+      <div class="dash-item"><span class="dash-icon">🌍</span><span id="dash-awake" class="dash-num">--</span><span class="dash-label">Amazonians Awake</span></div>
+      <div class="dash-item"><span class="dash-icon">🌙</span><span id="dash-asleep" class="dash-num">--</span><span class="dash-label">Amazonians Asleep</span></div>
+      <div class="dash-item"><span class="dash-icon">☀️</span><span id="dash-noon" class="dash-num">--</span><span class="dash-label">At Noon</span></div>
+      <div class="dash-item"><span class="dash-icon">💻</span><span id="dash-breakfast" class="dash-num">--</span><span class="dash-label">Starting Work</span></div>
+      <div class="dash-item"><span class="dash-icon">🏙️</span><span id="dash-bed" class="dash-num">--</span><span class="dash-label">Ending Shift</span></div>
+    </div>
+
+    <!-- Time Slider -->
+    <div class="time-panel">
+      <div class="time-display">
+        <span id="time-icon">🌞</span>
+        <span id="time-label">12:00</span>
+        <span id="time-period">PM</span>
+      </div>
+      <div class="time-slider-wrap">
+        <input type="range" id="time-slider" min="0" max="24" step="0.25" value="12" />
+        <div class="time-markers">
+          <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
+        </div>
+      </div>
+      <div class="time-controls">
+<button id="time-play" class="time-btn" title="Play the global 24-hour story">▶</button>
+        <span id="utc-clock" class="utc-clock">--:--:-- UTC</span>
+        <span class="time-live">LIVE</span>
+      </div>
+    </div>
+
+    <!-- Globe Title -->
+<div class="globe-title">
+      <h2>What Amazon employees are doing <span id="daytime-word">now</span></h2>
+      <p id="globe-subtitle">1.576M Amazonians · 26 countries · 76 featured sites/cities · 2024-2025 workforce data</p>
+    </div>
+
+
+    <!-- Country Panel (unified: Overview | Compare | News & Story) -->
+    <div id="country-panel" class="country-panel">
+      <button class="card-close" id="panel-close">✕</button>
+      <div class="panel-header">
+        <div class="flag-box" id="flag-box">🌍</div>
+        <div class="panel-title">
+          <h3 id="card-name">Country</h3>
+          <p id="card-capital">Capital</p>
+        </div>
+        <div class="card-local-time" id="card-local-time">Local Time: --:--</div>
+      </div>
+
+      <div class="panel-tabs">
+        <button class="ptab active" data-tab="overview">📊 Overview</button>
+        <button class="ptab" data-tab="compare">⚖️ Compare</button>
+        <button class="ptab" data-tab="story">📰 News &amp; Story</button>
+      </div>
+
+<!-- OVERVIEW TAB -->
+      <div class="panel-content active" id="panel-overview">
+        <!-- Amazon Employees (primary focus) -->
+        <div class="card-stats amazon-primary">
+          <div class="stat amazon-stat"><span class="stat-label">Amazon Employees</span><span class="stat-value stat-big" id="card-amzn-emp">—</span></div>
+          <div class="stat amazon-stat"><span class="stat-label">% of Amazon</span><span class="stat-value" id="card-amzn-share">—</span></div>
+          <div class="stat amazon-stat"><span class="stat-label">Sites</span><span class="stat-value" id="card-amzn-off">—</span></div>
+        </div>
+        <div class="card-hq">
+          <span class="stat-label">HQ / Focus</span>
+          <span class="stat-value" id="card-amzn-focus">—</span>
+        </div>
+        <div class="country-moment" id="country-moment">
+          <div class="country-moment-photo" id="country-moment-photo">
+            <img id="country-moment-img" alt="" loading="lazy" />
+            <span class="country-moment-fallback">📍</span>
+          </div>
+          <div class="country-moment-copy">
+            <span class="country-moment-kicker" id="country-moment-kicker">Local lens</span>
+            <h4 id="country-moment-title">Famous Place</h4>
+            <p id="country-moment-text">A visual anchor for this country's Amazon story.</p>
+          </div>
+        </div>
+        <div class="place-strip" id="place-strip"></div>
+        <!-- Buildings / Office list -->
+        <div class="buildings-box">
+          <div class="buildings-head">
+            <h4>🏢 Major Sites &amp; Cities</h4>
+            <span id="buildings-count" class="buildings-count">—</span>
+          </div>
+          <div class="buildings-list" id="buildings-list"></div>
+        </div>
+        <!-- Country context row -->
+        <details class="country-context">
+          <summary>Country Context</summary>
+          <div class="card-stats context-grid">
+            <div class="stat"><span class="stat-label">Population</span><span class="stat-value" id="card-pop">—</span></div>
+            <div class="stat"><span class="stat-label">Happiness</span><span class="stat-value" id="card-happy">—</span></div>
+            <div class="stat"><span class="stat-label">Internet</span><span class="stat-value" id="card-internet">—</span></div>
+          </div>
+          <div class="card-bars">
+            <div class="bar-row"><span class="bar-label">Sleep</span><div class="bar-track"><div class="bar-fill sleep" id="bar-sleep"></div></div><span class="bar-num" id="num-sleep">—</span></div>
+            <div class="bar-row"><span class="bar-label">Work</span><div class="bar-track"><div class="bar-fill work" id="bar-work"></div></div><span class="bar-num" id="num-work">—</span></div>
+            <div class="bar-row"><span class="bar-label">Leisure</span><div class="bar-track"><div class="bar-fill leisure" id="bar-leisure"></div></div><span class="bar-num" id="num-leisure">—</span></div>
+          </div>
+        </details>
+        <div class="overview-actions">
+          <button id="card-office-btn" class="btn btn-sm btn-story">▶ Full Story & Site Explorer</button>
+        </div>
+      </div>
+
+      <!-- COMPARE TAB -->
+      <div class="panel-content" id="panel-compare">
+        <div class="compare-body">
+          <div class="compare-col" id="compare-a">
+            <div class="compare-flag">🌍</div>
+            <div class="compare-name" id="comp-a-name">Select A</div>
+          </div>
+          <div class="compare-vs">VS</div>
+          <div class="compare-col" id="compare-b">
+            <div class="compare-flag">🌍</div>
+            <div class="compare-name" id="comp-b-name">Select B</div>
+          </div>
+        </div>
+        <p class="compare-hint">💡 Click the country cards above to rotate the selection</p>
+        <div class="compare-tabs">
+          <button class="ctab active" data-chart="radar">Radar</button>
+          <button class="ctab" data-chart="bar">Bar</button>
+        </div>
+        <div class="compare-chart-wrap">
+          <canvas id="compare-chart"></canvas>
+        </div>
+      </div>
+
+<!-- NEWS & STORY TAB -->
+      <div class="panel-content" id="panel-story">
+<div class="story-country-banner" id="story-country-banner">
+          <div class="story-country-flag" id="story-country-flag">🌍</div>
+          <div class="story-country-info">
+            <span class="story-country-label">24-Hour Workforce Story</span>
+            <strong id="story-country-name">Global</strong>
+          </div>
+          <button class="btn btn-sm story-play-btn" id="story-play-btn" title="Play this country's cinematic story">▶ Play</button>
+        </div>
+        <p class="story-intro" id="story-intro"></p>
+        <div class="story-scenes" id="story-scenes"></div>
+        <div class="story-funfact" id="story-funfact"></div>
+        <div class="story-map">
+          <iframe id="story-map-frame" title="Country Map" loading="lazy"></iframe>
+        </div>
+        <div class="office-explorer" id="office-explorer">
+          <div class="office-header">
+            <div>
+              <h4>🏢 Site Locations</h4>
+              <p id="office-summary">Choose a site to see the building, teams, and news.</p>
+            </div>
+          </div>
+          <div class="office-list" id="office-list"></div>
+          <div class="office-detail" id="office-detail"></div>
+        </div>
+        <div class="story-evidence">
+          <h4>📰 Clickable News &amp; Evidence</h4>
+          <div id="story-evidence-list" class="story-evidence-list"></div>
+        </div>
+      </div>
+    </div>
+
+<!-- Legend -->
+<div class="globe-legend">
+      <span><i class="dot flag-dot">🇺🇸</i> Country</span>
+      <span><i class="dot office-dot">🛒</i> Amazon Site / City</span>
+      <span><i class="dot night"></i> Night</span>
+      <span><i class="dot day"></i> Day</span>
+      <span><i class="dot dawn"></i> Dawn/Dusk</span>
+      <span><i class="dot arc"></i> Active Connection</span>
+    </div>
+
+    <!-- Story Mode Narration -->
+    <div id="story-overlay" class="story-overlay">
+      <div class="story-text" id="story-text"></div>
+      <button class="btn btn-sm" id="story-skip">Skip ✕</button>
+    </div>
+
+    <!-- Tooltip -->
+    <div id="tooltip" class="tooltip"></div>
+  </section>
+
+  <!-- ===== SCREEN 3: INSIGHTS ===== -->
+  <section id="insights-screen" class="screen">
+    <div class="insights-wrap">
+      <button class="btn btn-back" id="insights-back">← Back to Globe</button>
+<h2 class="insights-title">5 <span>"I Had No Idea!"</span> Workforce Discoveries</h2>
+      <div class="insights-grid">
+        <div class="insight-card" data-num="1">
+          <div class="insight-icon">🇺🇸</div>
+          <h4>The US Dominates</h4>
+          <p>The dataset lists the United States at <strong>~1.1M employees</strong> — anchored by Seattle HQ, HQ2 in Arlington, Bellevue, and major operations sites.</p>
+        </div>
+        <div class="insight-card" data-num="2">
+          <div class="insight-icon">🇮🇳</div>
+          <h4>India's Tech Powerhouse</h4>
+          <p>India is Amazon's <strong>largest APAC workforce hub</strong> in this dataset — ~435K employees across Hyderabad, Bangalore, Chennai, Mumbai, Delhi NCR, and Pune.</p>
+        </div>
+        <div class="insight-card" data-num="3">
+          <div class="insight-icon">🇱🇺</div>
+          <h4>Small Country, Big HQ</h4>
+          <p>Luxembourg City hosts Amazon's <strong>EU headquarters</strong>, with ~6K employees coordinating European corporate operations.</p>
+        </div>
+        <div class="insight-card" data-num="4">
+          <div class="insight-icon">🌍</div>
+          <h4>The Sun Never Sets</h4>
+          <p>Amazon spans <strong>every timezone</strong>. When Seattle sleeps, Hyderabad, Tokyo, Singapore, and Sydney are already moving the day forward.</p>
+        </div>
+        <div class="insight-card" data-num="5">
+          <div class="insight-icon">☁️</div>
+          <h4>Cloud Everywhere</h4>
+          <p>The site story highlights Hyderabad, Seattle, Arlington, Luxembourg City, London, Cape Town, and Bellevue as anchor locations behind the workforce numbers.</p>
+        </div>
+      </div>
+      <div class="insight-charts">
+<div class="insight-chart">
+          <h4>Workforce vs. Internet Access</h4>
+          <canvas id="insight-chart"></canvas>
+        </div>
+<div class="insight-chart">
+          <h4>Amazon Workforce by Country (Top 10)</h4>
+          <canvas id="barrace-chart"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCREEN 4: CONCLUSION ===== -->
+  <section id="conclusion-screen" class="screen">
+    <div class="conclusion-wrap">
+<h2 class="conclusion-title">One Workforce. <span>1.576 Million Stories.</span></h2>
+      <p class="conclusion-text">
+        As the globe spins, Amazon never sleeps — somewhere, an engineer is deploying, a fulfillment center is packing, an AWS team is keeping the cloud alive.
+        From Seattle to Singapore, one shared mission: <em>delivering for customers, around the clock.</em>
+      </p>
+      <div class="conclusion-stats">
+        <div class="cstat"><span class="cstat-num" data-count="1576000">0</span><span class="cstat-label">Amazon Employees (2025)</span></div>
+        <div class="cstat"><span class="cstat-num" data-count="26">0</span><span class="cstat-label">Countries</span></div>
+        <div class="cstat"><span class="cstat-num" data-count="76">0</span><span class="cstat-label">Featured Sites</span></div>
+      </div>
+      <div class="conclusion-cta">
+        <button class="btn btn-glow" id="restart-btn">Relive the Journey</button>
+      </div>
+      <p class="conclusion-credit">Viz Con 2026 · Venkata Madhava Reddy · APAC Region</p>
+    </div>
+  </section>
+
+<!-- ===== SCREEN 5: COUNTRY EXPLORE (Scroll to Explore) ===== -->
+  <section id="explore-screen" class="screen">
+    <div class="explore-wrap">
+      <button class="btn btn-back" id="explore-back">← Back to Globe</button>
+      <h2 class="explore-title">Explore <span>Every Country</span></h2>
+      <p class="explore-sub">Every country in the dataset — major sites/cities, workforce estimates, and a story of what employees do each day.</p>
+      <div class="explore-grid" id="explore-grid"></div>
+    </div>
+  </section>
+
+<!-- ===== SCRIPTS ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/stories.js"></script>
+  <script src="js/offices.js"></script>
+  <script src="js/landmarks.js"></script>
+  <script src="js/globe.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
